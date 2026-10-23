@@ -1,26 +1,59 @@
+
 class Solution {
-    public boolean isPalindrome(ListNode head) {
 
-        ListNode temp = head;
-        ArrayList<Integer> arr = new ArrayList<>();
+    public ListNode getMidPoint(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
 
-        // Linked List → ArrayList
-        while (temp != null) {
-            arr.add(temp.val);
-            temp = temp.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        // Two pointer
-        int i = 0;
-        int j = arr.size() - 1;
+        return slow;
+    }
 
-        while (i < j) {
-            if (!arr.get(i).equals(arr.get(j))) {
+    public ListNode reverseLL(ListNode head) {
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+            ListNode fwd = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = fwd;
+        }
+
+        return prev;
+    }
+
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // Find the middle
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // Reverse the second half
+        ListNode head2 = reverseLL(slow.next);
+
+        ListNode temp1 = head;
+        ListNode temp2 = head2;
+
+        while (temp2 != null) {
+            if (temp1.val != temp2.val) {
                 return false;
             }
 
-            i++;
-            j--;
+            temp1 = temp1.next;
+            temp2 = temp2.next;
         }
 
         return true;
