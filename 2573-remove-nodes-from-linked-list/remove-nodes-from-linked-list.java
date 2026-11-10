@@ -1,40 +1,32 @@
 class Solution {
     public ListNode removeNodes(ListNode head) {
 
-        // 1. Reverse the linked list
-        head = reverse(head);
+        Stack<ListNode> st = new Stack<>();
 
-        // 2. Find maximum and remove smaller nodes
-        int max = head.val;
-        ListNode curr = head;
+        ListNode temp = head;
 
-        while (curr != null && curr.next != null) {
+        // Step 1: Traverse the linked list
+        while (temp != null) {
 
-            if (curr.next.val < max) {
-                // delete curr.next
-                curr.next = curr.next.next;
-            } else {
-                // curr.next is >= max
-                curr = curr.next;
-                max = curr.val;
+            while (!st.isEmpty() && st.peek().val < temp.val) {
+                st.pop();
             }
+
+            st.push(temp);
+            temp = temp.next;
         }
 
-        // 3. Reverse again
-        return reverse(head);
-    }
+        // Step 2: Reconstruct linked list
+        ListNode newHead = null;
 
-    private ListNode reverse(ListNode head) {
-        ListNode prev = null;
-        ListNode curr = head;
+        while (!st.isEmpty()) {
 
-        while (curr != null) {
-            ListNode next = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = next;
+            ListNode top = st.pop();
+
+            top.next = newHead;
+            newHead = top;
         }
 
-        return prev;
+        return newHead;
     }
 }
